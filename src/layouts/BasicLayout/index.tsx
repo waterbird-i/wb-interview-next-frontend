@@ -8,8 +8,13 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import GlobalFooter from '@/components/GlobalFooter';
 import { menus } from '../../../config/menu';
-import React from 'react';
+import React, { useState } from 'react';
 import { listQuestionBankVoByPageUsingPost } from '@/api/questionBankController';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/stores';
+import getAccessibleMenu from '@/access/menuAccess';
+import MdEditor from '@/components/MdEditor';
+import MdViewer from '@/components/MdView';
 
 /**
  * 搜索条
@@ -56,10 +61,9 @@ interface Props {
 }
 
 export default function BasicLayout({ children }: Props) {
-  listQuestionBankVoByPageUsingPost({}).then((res) => {
-    console.log(res);
-  });
   const pathname = usePathname();
+  const loginUser = useSelector((state: RootState) => state.loginUser);
+  const [text, setText] = useState<string>('');
   return (
     <div
       id="basicLayout"
@@ -83,9 +87,9 @@ export default function BasicLayout({ children }: Props) {
           pathname,
         }}
         avatarProps={{
-          src: "/assets/logo.png",
+          src: loginUser.userAvatar || "/assets/notLoginUser.png",
           size: "small",
-          title: "waterbird",
+          title: loginUser.userName || "未登录",
           render: (_, dom) => {
             return (
               <Dropdown
@@ -133,7 +137,7 @@ export default function BasicLayout({ children }: Props) {
         onMenuHeaderClick={(e) => console.log(e)}
         // 定义菜单
         menuDataRender={() => {
-          return menus;
+          return getAccessibleMenu(loginUser,menus);
         }}
         // 菜单项渲染
         menuItemRender={(item, dom) => (
@@ -143,6 +147,8 @@ export default function BasicLayout({ children }: Props) {
         )}
       >
         {children}
+        <MdEditor value={text} onChange={setText} />
+        <MdViewer value={text} />
       </ProLayout>
     </div>
   );

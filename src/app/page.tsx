@@ -3,9 +3,6 @@ import { Button } from "antd";
 import { listQuestionBankVoByPageUsingPost } from "@/api/questionBankController";
 
 export default function Home() {
-  listQuestionBankVoByPageUsingPost({}).then((res) => {
-    console.log(res);
-  });
   return (
     <div className={styles.page}>
       <main className={styles.main}>
