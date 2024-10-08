@@ -34,6 +34,21 @@ export const menus = [
       }
     ],
   },
+  {
+    path: "/user",
+    name: "用户",
+    hideInMenu: true,
+    children: [
+      {
+        path: "/user/login",
+        name: "登录",
+      },
+      {
+        path: "/user/register",
+        name: "注册",
+      }
+    ],
+  },
 ] as MenuDataItem[];
 
 // 根据路径查找所有菜单

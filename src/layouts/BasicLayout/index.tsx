@@ -1,20 +1,36 @@
 "use client";
+
 import './index.css';
-import { GithubFilled, LogoutOutlined, SearchOutlined } from '@ant-design/icons';
-import { ProLayout } from '@ant-design/pro-components';
-import { Dropdown, Input, theme } from 'antd';
+import { GithubFilled, LogoutOutlined, SearchOutlined, UserOutlined } from '@ant-design/icons';
+import { Dropdown, Input, message, theme } from 'antd';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import GlobalFooter from '@/components/GlobalFooter';
 import { menus } from '../../../config/menu';
 import React, { useState } from 'react';
-import { listQuestionBankVoByPageUsingPost } from '@/api/questionBankController';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/stores';
-import getAccessibleMenu from '@/access/menuAccess';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/stores';
 import MdEditor from '@/components/MdEditor';
 import MdViewer from '@/components/MdView';
+import dynamic from 'next/dynamic';
+import getAccessibleMenu from '@/access/menuAccess';
+import { userLogoutUsingPost } from '@/api/userController';
+import { setLoginUser } from '@/stores/loginUser';
+import { DEFAULT_USER } from '@/constants/user';
+
+/**
+ * 解决 Warning: Prop `className` did not match
+ */
+const ProLayout = dynamic(
+  // 引入dynamic高阶组件，实现动态导入
+  () => {
+    return import("@ant-design/pro-layout");
+  },
+  {
+    ssr: false, // 仅在客户端渲染
+  },
+);
 
 /**
  * 搜索条
@@ -63,7 +79,26 @@ interface Props {
 export default function BasicLayout({ children }: Props) {
   const pathname = usePathname();
   const loginUser = useSelector((state: RootState) => state.loginUser);
-  const [text, setText] = useState<string>('');
+  const router = useRouter();
+  const [text, setText] = useState<string>("");
+  const dispatch = useDispatch<AppDispatch>();
+  /**
+   * 用户注销
+   */
+  const userLogout = async () => {
+    try {
+      await userLogoutUsingPost();
+      message.success("已退出登录");
+      dispatch(setLoginUser(DEFAULT_USER));
+      router.push("/user/login");
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        message.error("登录失败，" + e.message);
+      } else {
+        message.error("登录失败，未知错误");
+      }
+    }
+  };
   return (
     <div
       id="basicLayout"
@@ -91,20 +126,35 @@ export default function BasicLayout({ children }: Props) {
           size: "small",
           title: loginUser.userName || "未登录",
           render: (_, dom) => {
-            return (
+            return loginUser.id ? (
               <Dropdown
                 menu={{
                   items: [
+                    {
+                      key: "userCenter",
+                      icon: <UserOutlined />,
+                      label: "个人中心",
+                    },
                     {
                       key: "logout",
                       icon: <LogoutOutlined />,
                       label: "退出登录",
                     },
                   ],
+                  onClick: async (event: { key: React.Key }) => {
+                    const { key } = event;
+                    if (key === "logout") {
+                      await userLogout();
+                    } else if (key === "userCenter") {
+                      router.push("/user/center");
+                    }
+                  },
                 }}
               >
                 {dom}
               </Dropdown>
+            ) : (
+              <div onClick={() => router.push("/user/login")}>{dom}</div>
             );
           },
         }}
@@ -137,7 +187,7 @@ export default function BasicLayout({ children }: Props) {
         onMenuHeaderClick={(e) => console.log(e)}
         // 定义菜单
         menuDataRender={() => {
-          return getAccessibleMenu(loginUser,menus);
+          return getAccessibleMenu(loginUser, menus);
         }}
         // 菜单项渲染
         menuItemRender={(item, dom) => (
@@ -147,8 +197,10 @@ export default function BasicLayout({ children }: Props) {
         )}
       >
         {children}
-        <MdEditor value={text} onChange={setText} />
-        <MdViewer value={text} />
+        <div>
+          <MdEditor value={text} onChange={setText} />
+          <MdViewer value={text} />
+        </div>
       </ProLayout>
     </div>
   );

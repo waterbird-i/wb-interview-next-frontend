@@ -1,13 +1,10 @@
-import styles from "./page.module.css";
+import  "./index.css";
 import { Button } from "antd";
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
+    <div id="home">
         <Button>111</Button>
-      </main>
-      <footer className={styles.footer}></footer>
     </div>
   );
 }
