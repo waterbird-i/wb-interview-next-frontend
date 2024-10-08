@@ -1,30 +1,32 @@
 import type { ProColumns } from "@ant-design/pro-components";
 import { ProTable } from "@ant-design/pro-components";
 import { message, Modal } from "antd";
-import { updateUserUsingPost } from "@/api/userController";
 import React from "react";
+import { updateQuestionBankUsingPost } from "@/api/questionBankController";
 
 interface Props {
-  oldData?: API.User;
+  oldData?: API.QuestionBank;
   visible: boolean;
-  columns: ProColumns<API.User>[];
-  onSubmit: (values: API.UserUpdateRequest) => void;
+  columns: ProColumns<API.QuestionBank>[];
+  onSubmit: (values: API.QuestionBankUpdateRequest) => void;
   onCancel: () => void;
 }
 /**
  * 提交函数
  * @param fields
  */
-const handleUpdate = async (fields: API.UserUpdateRequest) => {
+const handleUpdate = async (fields: API.QuestionBankUpdateRequest) => {
   const hide = message.loading("正在添加");
   try {
-    await updateUserUsingPost(fields);
+    await updateQuestionBankUsingPost(fields);
     hide();
     message.success("编辑成功");
     return true;
   } catch (error: unknown) {
     hide();
-    message.error(`编辑失败，${error instanceof Error ? error.message : error}`);
+    message.error(
+      `编辑失败，${error instanceof Error ? error.message : error}`,
+    );
     return false;
   }
 };
@@ -61,7 +63,7 @@ const UpdateModal: React.FC<Props> = ({
         form={{
           initialValues: oldData,
         }}
-        onSubmit={async (values: API.UserUpdateRequest) => {
+        onSubmit={async (values: API.QuestionBankUpdateRequest) => {
           if (!oldData?.id || !onSubmit) {
             return;
           }

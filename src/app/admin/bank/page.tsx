@@ -2,23 +2,20 @@
 import React, { useRef, useState } from "react";
 import withAuth from "@/components/withAuth";
 import ACCESS_ENUM from "@/access/accessEnum";
-import { Button, message, Popconfirm, Space, Typography } from 'antd';
+import { Button, message, Popconfirm, Space, Typography } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import {
-  deleteUserUsingPost,
-  listUserByPageUsingPost,
-} from "@/api/userController";
-import { PageContainer, ProTable } from "@ant-design/pro-components";
 import type { ActionType, ProColumns } from "@ant-design/pro-components";
-import CreateModal from "@/app/admin/user/components/CreateModal";
-import UpdateModal from "@/app/admin/user/components/UpdateModal";
+import { PageContainer, ProTable } from "@ant-design/pro-components";
+import { deleteQuestionBankUsingPost, listQuestionBankByPageUsingPost } from '@/api/questionBankController';
+import CreateModal from '@/app/admin/bank/components/CreateModal';
+import UpdateModal from '@/app/admin/bank/components/UpdateModal';
 
 /**
- * 用户管理页面
+ * 题库管理页面
  * @constructor
  */
-const UserAdminPage = () => {
-  const [currentRow, setCurrentRow] = useState<API.User>();
+const BankAdminPage = () => {
+  const [currentRow, setCurrentRow] = useState<API.QuestionBank>();
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
 
@@ -27,11 +24,11 @@ const UserAdminPage = () => {
    * 删除节点
    * @param row
    */
-  const handleDelete = async (row: API.User) => {
+  const handleDelete = async (row: API.QuestionBank) => {
     const hide = message.loading("正在删除");
     if (!row) return true;
     try {
-      await deleteUserUsingPost({
+      await deleteQuestionBankUsingPost({
         id: row.id as never,
       });
       hide();
@@ -41,7 +38,9 @@ const UserAdminPage = () => {
       return true;
     } catch (error: unknown) {
       hide();
-      message.error(`删除失败，${error instanceof Error ? error.message : error}`);
+      message.error(
+        `删除失败，${error instanceof Error ? error.message : error}`,
+      );
       return false;
     }
   };
@@ -49,7 +48,7 @@ const UserAdminPage = () => {
   /**
    * 表格列
    */
-  const columns: ProColumns<API.User>[] = [
+  const columns: ProColumns<API.QuestionBank>[] = [
     {
       title: "id",
       dataIndex: "id",
@@ -57,18 +56,18 @@ const UserAdminPage = () => {
       hideInForm: true,
     },
     {
-      title: "账号",
-      dataIndex: "userAccount",
+      title: "标题",
+      dataIndex: "title",
       valueType: "text",
     },
     {
-      title: "用户名",
-      dataIndex: "userName",
+      title: "描述",
+      dataIndex: "description",
       valueType: "text",
     },
     {
-      title: "头像",
-      dataIndex: "userAvatar",
+      title: "图片",
+      dataIndex: "picture",
       valueType: "image",
       fieldProps: {
         width: 64,
@@ -76,26 +75,17 @@ const UserAdminPage = () => {
       hideInSearch: true,
     },
     {
-      title: "简介",
-      dataIndex: "userProfile",
-      valueType: "textarea",
-    },
-    {
-      title: "权限",
-      dataIndex: "userRole",
-      valueEnum: {
-        user: {
-          text: "用户",
-        },
-        admin: {
-          text: "管理员",
-        },
-      },
-    },
-    {
       title: "创建时间",
       sorter: true,
       dataIndex: "createTime",
+      valueType: "dateTime",
+      hideInSearch: true,
+      hideInForm: true,
+    },
+    {
+      title: "编辑时间",
+      sorter: true,
+      dataIndex: "editTime",
       valueType: "dateTime",
       hideInSearch: true,
       hideInForm: true,
@@ -122,12 +112,14 @@ const UserAdminPage = () => {
           >
             修改
           </Typography.Link>
-          <Popconfirm title="删除用户" description="确定要删除该用户吗？" onConfirm={() => handleDelete(record)}
+          <Popconfirm
+            title="删除题库"
+            description="确定要删除该题库吗？"
+            onConfirm={() => handleDelete(record)}
             okText="确定"
-            cancelText="取消">
-            <Typography.Link type="danger">
-              删除
-            </Typography.Link>
+            cancelText="取消"
+          >
+            <Typography.Link type="danger">删除</Typography.Link>
           </Popconfirm>
         </Space>
       ),
@@ -136,7 +128,7 @@ const UserAdminPage = () => {
 
   return (
     <PageContainer>
-      <ProTable<API.User>
+      <ProTable<API.QuestionBank>
         headerTitle={"查询表格"}
         actionRef={actionRef}
         toolBarRender={() => [
@@ -153,12 +145,12 @@ const UserAdminPage = () => {
         request={async (params, sort, filter) => {
           const sortField = Object.keys(sort)?.[0];
           const sortOrder = sort?.[sortField];
-          const res = await listUserByPageUsingPost({
+          const res = await listQuestionBankByPageUsingPost({
             ...params,
             sortField,
             sortOrder,
             ...filter,
-          } as API.UserQueryRequest);
+          } as API.QuestionBankQueryRequest);
           return {
             success: res?.code === 0,
             data: res?.data?.records ?? [],
@@ -200,4 +192,4 @@ const UserAdminPage = () => {
   );
 };
 
-export default withAuth(UserAdminPage, [ACCESS_ENUM.ADMIN]);
+export default withAuth(BankAdminPage, [ACCESS_ENUM.ADMIN]);

@@ -1,31 +1,38 @@
-import { ProTable } from "@ant-design/pro-components";
 import type { ProColumns } from "@ant-design/pro-components";
+import { ProTable } from "@ant-design/pro-components";
 import { message, Modal } from "antd";
 import React from "react";
-import { addUserUsingPost } from "@/api/userController";
+import { addQuestionBankUsingPost } from "@/api/questionBankController";
 
 interface Props {
   visible: boolean;
-  columns: ProColumns<API.User>[];
-  onSubmit: (values: API.UserAddRequest) => void;
+  columns: ProColumns<API.QuestionBank>[];
+  onSubmit: (values: API.QuestionBankAddRequest) => void;
   onCancel: () => void;
 }
 
-const CreateModal: React.FC<Props> = ({ visible, columns, onSubmit, onCancel }) => {
+const CreateModal: React.FC<Props> = ({
+  visible,
+  columns,
+  onSubmit,
+  onCancel,
+}) => {
   /**
    * 提交函数
    * @param fields
    */
-  const handleAdd = async (fields: API.UserAddRequest) => {
+  const handleAdd = async (fields: API.QuestionBankAddRequest) => {
     const hide = message.loading("正在添加");
     try {
-      await addUserUsingPost(fields);
+      await addQuestionBankUsingPost(fields);
       hide();
       message.success("创建成功");
       return true;
     } catch (error: unknown) {
       hide();
-      message.error(`删除失败，${error instanceof Error ? error.message : error}`);
+      message.error(
+        `创建失败，${error instanceof Error ? error.message : error}`,
+      );
       return false;
     }
   };
@@ -43,7 +50,7 @@ const CreateModal: React.FC<Props> = ({ visible, columns, onSubmit, onCancel }) 
       <ProTable
         type="form"
         columns={columns}
-        onSubmit={async (values: API.UserAddRequest) => {
+        onSubmit={async (values: API.QuestionBankAddRequest) => {
           const success = await handleAdd(values);
           if (success) {
             onSubmit?.(values);

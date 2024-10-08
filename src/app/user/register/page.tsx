@@ -34,11 +34,7 @@ const UserRegisterPage: React.FC = () => {
         router.push("/user/login");
       }
     } catch (e: unknown) {
-      if (e instanceof Error) {
-        message.error("登录失败，" + e.message);
-      } else {
-        message.error("登录失败，未知错误");
-      }
+      message.error(`删除失败，${e instanceof Error ? e.message : e}`);
     }
   };
 

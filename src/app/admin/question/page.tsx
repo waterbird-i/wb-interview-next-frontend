@@ -2,23 +2,26 @@
 import React, { useRef, useState } from "react";
 import withAuth from "@/components/withAuth";
 import ACCESS_ENUM from "@/access/accessEnum";
-import { Button, message, Popconfirm, Space, Typography } from 'antd';
+import { Button, message, Popconfirm, Space, Typography } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import {
-  deleteUserUsingPost,
-  listUserByPageUsingPost,
-} from "@/api/userController";
-import { PageContainer, ProTable } from "@ant-design/pro-components";
 import type { ActionType, ProColumns } from "@ant-design/pro-components";
-import CreateModal from "@/app/admin/user/components/CreateModal";
-import UpdateModal from "@/app/admin/user/components/UpdateModal";
+import { PageContainer, ProTable } from "@ant-design/pro-components";
+
+import {
+  deleteQuestionUsingPost,
+  listQuestionByPageUsingPost,
+} from "@/api/questionController";
+import CreateModal from "@/app/admin/question/components/CreateModal";
+import UpdateModal from "@/app/admin/question/components/UpdateModal";
+import MdEditor from "@/components/MdEditor";
+import TagList from "@/components/TagList";
 
 /**
- * 用户管理页面
+ * 题库管理页面
  * @constructor
  */
-const UserAdminPage = () => {
-  const [currentRow, setCurrentRow] = useState<API.User>();
+const QuestionAdminPage = () => {
+  const [currentRow, setCurrentRow] = useState<API.Question>();
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
 
@@ -27,11 +30,11 @@ const UserAdminPage = () => {
    * 删除节点
    * @param row
    */
-  const handleDelete = async (row: API.User) => {
+  const handleDelete = async (row: API.Question) => {
     const hide = message.loading("正在删除");
     if (!row) return true;
     try {
-      await deleteUserUsingPost({
+      await deleteQuestionUsingPost({
         id: row.id as never,
       });
       hide();
@@ -41,7 +44,9 @@ const UserAdminPage = () => {
       return true;
     } catch (error: unknown) {
       hide();
-      message.error(`删除失败，${error instanceof Error ? error.message : error}`);
+      message.error(
+        `删除失败，${error instanceof Error ? error.message : error}`,
+      );
       return false;
     }
   };
@@ -49,7 +54,7 @@ const UserAdminPage = () => {
   /**
    * 表格列
    */
-  const columns: ProColumns<API.User>[] = [
+  const columns: ProColumns<API.Question>[] = [
     {
       title: "id",
       dataIndex: "id",
@@ -57,45 +62,66 @@ const UserAdminPage = () => {
       hideInForm: true,
     },
     {
-      title: "账号",
-      dataIndex: "userAccount",
+      title: "标题",
+      dataIndex: "title",
       valueType: "text",
     },
     {
-      title: "用户名",
-      dataIndex: "userName",
+      title: "内容",
+      dataIndex: "content",
       valueType: "text",
-    },
-    {
-      title: "头像",
-      dataIndex: "userAvatar",
-      valueType: "image",
-      fieldProps: {
-        width: 64,
-      },
       hideInSearch: true,
-    },
-    {
-      title: "简介",
-      dataIndex: "userProfile",
-      valueType: "textarea",
-    },
-    {
-      title: "权限",
-      dataIndex: "userRole",
-      valueEnum: {
-        user: {
-          text: "用户",
-        },
-        admin: {
-          text: "管理员",
-        },
+      width: 240,
+      renderFormItem: (_, { ...rest }) => {
+        return (
+          // value 和 onchange 会通过 form 自动注入。
+          <MdEditor
+            // 组件的配置
+            {...rest?.fieldProps}
+          />
+        );
       },
     },
+
+    {
+      title: "答案",
+      dataIndex: "answer",
+      valueType: "text",
+      hideInSearch: true,
+      width: 640,
+    },
+    {
+      title: "标签",
+      dataIndex: "tags",
+      valueType: "select",
+      fieldProps: {
+        mode: "tags",
+      },
+      render: (_, record) => {
+        const tagList = JSON.parse(record.tags || "[]");
+        return <TagList tagList={tagList} />;
+      },
+    },
+
+    {
+      title: "创建用户",
+      dataIndex: "userId",
+      valueType: "text",
+      hideInForm: true,
+    },
+
     {
       title: "创建时间",
       sorter: true,
       dataIndex: "createTime",
+      valueType: "dateTime",
+      hideInSearch: true,
+      hideInForm: true,
+    },
+    {
+      title: "编辑时间",
+      sorter: true,
+      dataIndex: "editTime",
       valueType: "dateTime",
       hideInSearch: true,
       hideInForm: true,
@@ -122,12 +148,14 @@ const UserAdminPage = () => {
           >
             修改
           </Typography.Link>
-          <Popconfirm title="删除用户" description="确定要删除该用户吗？" onConfirm={() => handleDelete(record)}
+          <Popconfirm
+            title="删除题目"
+            description="确定要删除该题目吗？"
+            onConfirm={() => handleDelete(record)}
             okText="确定"
-            cancelText="取消">
-            <Typography.Link type="danger">
-              删除
-            </Typography.Link>
+            cancelText="取消"
+          >
+            <Typography.Link type="danger">删除</Typography.Link>
           </Popconfirm>
         </Space>
       ),
@@ -136,7 +164,7 @@ const UserAdminPage = () => {
 
   return (
     <PageContainer>
-      <ProTable<API.User>
+      <ProTable<API.Question>
         headerTitle={"查询表格"}
         actionRef={actionRef}
         toolBarRender={() => [
@@ -153,12 +181,12 @@ const UserAdminPage = () => {
         request={async (params, sort, filter) => {
           const sortField = Object.keys(sort)?.[0];
           const sortOrder = sort?.[sortField];
-          const res = await listUserByPageUsingPost({
+          const res = await listQuestionByPageUsingPost({
             ...params,
             sortField,
             sortOrder,
             ...filter,
-          } as API.UserQueryRequest);
+          } as API.QuestionQueryRequest);
           return {
             success: res?.code === 0,
             data: res?.data?.records ?? [],
@@ -200,4 +228,4 @@ const UserAdminPage = () => {
   );
 };
 
-export default withAuth(UserAdminPage, [ACCESS_ENUM.ADMIN]);
+export default withAuth(QuestionAdminPage, [ACCESS_ENUM.ADMIN]);
