@@ -4,7 +4,7 @@ import axios from "axios";
 const myAxios = axios.create({
   baseURL: "http://localhost:8101",
   timeout: 10000,
-  // cookie 自动接带
+  // cookie 自动携带
   withCredentials: true,
 });
 
