@@ -125,13 +125,13 @@ const UserAdminPage = () => {
           >
             修改
           </Typography.Link>
-          <Popconfirm title="删除用户" description="确定要删除该用户吗？" onConfirm={confirm}
-            onCancel={()=>{}}
-            okText="Yes"
-            cancelText="No"
-          <Typography.Link type="danger" onClick={() => handleDelete(record)}>
-            删除
-          </Typography.Link>
+          <Popconfirm title="删除用户" description="确定要删除该用户吗？" onConfirm={() => handleDelete(record)}
+            okText="确定"
+            cancelText="取消">
+            <Typography.Link type="danger">
+              删除
+            </Typography.Link>
+          </Popconfirm>
         </Space>
       ),
     },
