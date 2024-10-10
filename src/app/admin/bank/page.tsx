@@ -129,7 +129,7 @@ const BankAdminPage = () => {
   return (
     <PageContainer>
       <ProTable<API.QuestionBank>
-        headerTitle={"查询表格"}
+        headerTitle={"题库管理"}
         actionRef={actionRef}
         toolBarRender={() => [
           <Button

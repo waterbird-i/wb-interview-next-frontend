@@ -6,7 +6,6 @@ import { Button, message, Popconfirm, Space, Typography } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import type { ActionType, ProColumns } from "@ant-design/pro-components";
 import { PageContainer, ProTable } from "@ant-design/pro-components";
-
 import {
   deleteQuestionUsingPost,
   listQuestionByPageUsingPost,
@@ -15,16 +14,16 @@ import CreateModal from "@/app/admin/question/components/CreateModal";
 import UpdateModal from "@/app/admin/question/components/UpdateModal";
 import MdEditor from "@/components/MdEditor";
 import TagList from "@/components/TagList";
+import "./index.css";
 
 /**
- * 题库管理页面
+ * 题目管理页面
  * @constructor
  */
 const QuestionAdminPage = () => {
   const [currentRow, setCurrentRow] = useState<API.Question>();
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
-
   const actionRef = useRef<ActionType>();
   /**
    * 删除节点
@@ -71,7 +70,6 @@ const QuestionAdminPage = () => {
       dataIndex: "content",
       valueType: "text",
       hideInSearch: true,
-      width: 240,
       renderFormItem: (_, { ...rest }) => {
         return (
           // value 和 onchange 会通过 form 自动注入。
@@ -88,7 +86,6 @@ const QuestionAdminPage = () => {
       dataIndex: "answer",
       valueType: "text",
       hideInSearch: true,
-      width: 640,
     },
     {
       title: "标签",
@@ -138,6 +135,8 @@ const QuestionAdminPage = () => {
       title: "操作",
       dataIndex: "option",
       valueType: "option",
+      width: 100,
+      fixed: "right",
       render: (_, record) => (
         <Space size="middle">
           <Typography.Link
@@ -163,9 +162,11 @@ const QuestionAdminPage = () => {
   ];
 
   return (
-    <PageContainer>
+    <PageContainer className="table-container">
       <ProTable<API.Question>
-        headerTitle={"查询表格"}
+        className="proTable"
+        scroll={{ x: "max-content" }}
+        headerTitle={"题目管理"}
         actionRef={actionRef}
         toolBarRender={() => [
           <Button

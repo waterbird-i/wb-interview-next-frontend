@@ -52,6 +52,7 @@ const UpdateModal: React.FC<Props> = ({
       destroyOnClose
       title={"编辑"}
       open={visible}
+      centered
       footer={null}
       onCancel={() => {
         onCancel?.();

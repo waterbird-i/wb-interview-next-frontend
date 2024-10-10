@@ -42,12 +42,14 @@ const CreateModal: React.FC<Props> = ({
       destroyOnClose
       title={"创建"}
       open={visible}
+      centered
       footer={null}
       onCancel={() => {
         onCancel?.();
       }}
     >
       <ProTable
+        style={{minWidth: "10vw"}}
         type="form"
         columns={columns}
         onSubmit={async (values: API.QuestionBankQuestionAddRequest) => {

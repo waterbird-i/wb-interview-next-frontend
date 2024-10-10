@@ -42,6 +42,7 @@ const CreateModal: React.FC<Props> = ({
       destroyOnClose
       title={"创建"}
       open={visible}
+      centered
       footer={null}
       onCancel={() => {
         onCancel?.();
