@@ -18,6 +18,7 @@ import getAccessibleMenu from '@/access/menuAccess';
 import { userLogoutUsingPost } from '@/api/userController';
 import { setLoginUser } from '@/stores/loginUser';
 import { DEFAULT_USER } from '@/constants/user';
+import SearchInput from '@/layouts/BasicLayout/components/SearchInput';
 
 /**
  * 解决 Warning: Prop `className` did not match
@@ -32,46 +33,6 @@ const ProLayout = dynamic(
   },
 );
 
-/**
- * 搜索条
- * @constructor
- */
-const SearchInput = () => {
-  const { token } = theme.useToken();
-  return (
-    <div
-      key="SearchOutlined"
-      aria-hidden
-      style={{
-        display: "flex",
-        alignItems: "center",
-        marginInlineEnd: 24,
-      }}
-      onMouseDown={(e) => {
-        e.stopPropagation();
-        e.preventDefault();
-      }}
-    >
-      <Input
-        style={{
-          borderRadius: 4,
-          marginInlineEnd: 12,
-          backgroundColor: token.colorBgTextHover,
-        }}
-        prefix={
-          <SearchOutlined
-            style={{
-              color: token.colorTextLightSolid,
-            }}
-          />
-        }
-        placeholder="搜索题目"
-        variant="borderless"
-      />
-    </div>
-  );
-};
-
 interface Props {
   children: React.ReactNode;
 }
@@ -80,7 +41,6 @@ export default function BasicLayout({ children }: Props) {
   const pathname = usePathname();
   const loginUser = useSelector((state: RootState) => state.loginUser);
   const router = useRouter();
-  const [text, setText] = useState<string>("");
   const dispatch = useDispatch<AppDispatch>();
   /**
    * 用户注销

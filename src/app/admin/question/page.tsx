@@ -189,9 +189,9 @@ const QuestionAdminPage = () => {
             ...filter,
           } as API.QuestionQueryRequest);
           return {
-            success: res?.code === 0,
-            data: res?.data?.records ?? [],
-            total: Number(res?.data?.total) || 0,
+            success: res?.data?.code === 0,
+            data: res?.data?.data?.records ?? [],
+            total: Number(res?.data?.data?.total) || 0,
           };
         }}
         columns={columns}

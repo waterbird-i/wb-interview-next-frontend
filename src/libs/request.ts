@@ -40,7 +40,7 @@ myAxios.interceptors.response.use(
       // 其他错误
       throw new Error(data.message ?? "服务器错误");
     }
-    return data;
+    return response;
   },
   // 非 2xx 响应触发
   function (error) {

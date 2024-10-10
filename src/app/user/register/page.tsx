@@ -28,7 +28,7 @@ const UserRegisterPage: React.FC = () => {
   }) => {
     try {
       const res = await userRegisterUsingPost(values);
-      if (res.data) {
+      if (res.data?.data) {
         message.success("注册成功，请登录");
         // 前往登录页
         router.push("/user/login");

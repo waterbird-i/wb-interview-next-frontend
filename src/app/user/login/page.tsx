@@ -35,7 +35,7 @@ const UserLoginPage: React.FC = () => {
       if (res.data) {
         message.success("登录成功！");
         // 保存用户登录态
-        dispatch(setLoginUser(res.data as LoginUserVO));
+        dispatch(setLoginUser(res.data?.data as LoginUserVO));
         router.replace("/");
         form.resetFields();
       }

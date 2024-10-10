@@ -38,7 +38,7 @@ export const menus = [
         access: ACCESS_ENUM.ADMIN,
       },
       {
-        path: "/admin/question",
+        path: "/admin/questions",
         name: "题目管理",
         access: ACCESS_ENUM.ADMIN,
       }
