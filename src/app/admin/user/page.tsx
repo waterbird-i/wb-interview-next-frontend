@@ -140,6 +140,7 @@ const UserAdminPage = () => {
         headerTitle={"查询表格"}
         actionRef={actionRef}
         scroll={{ y: "90vh"}}
+        virtual
         toolBarRender={() => [
           <Button
             type="primary"

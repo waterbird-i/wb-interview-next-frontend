@@ -8,6 +8,7 @@ interface Props {
   cardTitle?: React.ReactNode;
   questionList: API.QuestionVO[];
   questionBankId?: number;
+  // loadData?: () => Promise<API.QuestionVO[]>;
 }
 
 /**
@@ -23,6 +24,14 @@ const QuestionList = (props: Props) => {
       return <Tag key={tag}>{tag}</Tag>;
     });
   };
+
+  // const onScroll = (e: React.UIEvent<HTMLElement, UIEvent>) => {
+  //   if (Math.abs(e.currentTarget.scrollHeight - e.currentTarget.scrollTop - 500) <= 1) {
+  //     if (loadData) {
+  //       loadData();
+  //     }
+  //   }
+  // };
 
   return (
     <Card className="question-list" title={cardTitle}>
@@ -47,6 +56,29 @@ const QuestionList = (props: Props) => {
         )}
       />
     </Card>
+    // <Card className="question-list" title={cardTitle}>
+    //   <List>
+    //     <VirtualList data={questionList} height={400} itemHeight={50} onScroll={onScroll} itemKey='id'>
+    //       {(item: API.QuestionVO) => (
+    //         <List.Item extra={tagList(item.tagList)}>
+    //           <List.Item.Meta
+    //             title={
+    //               <Link
+    //                 href={
+    //                   questionBankId
+    //                     ? `/bank/${questionBankId}/question/${item.id}`
+    //                     : `/question/${item.id}`
+    //                 }
+    //               >
+    //                 {item.title}
+    //               </Link>
+    //             }
+    //           />
+    //         </List.Item>
+    //       )}
+    //     </VirtualList>
+    //   </List>
+    // </Card>
   );
 };
 

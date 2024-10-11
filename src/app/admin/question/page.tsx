@@ -15,6 +15,7 @@ import UpdateModal from "@/app/admin/question/components/UpdateModal";
 import MdEditor from "@/components/MdEditor";
 import TagList from "@/components/TagList";
 import "./index.css";
+import UpdateBankModal from "@/app/admin/question/components/UpdateBankModal";
 
 /**
  * 题目管理页面
@@ -24,6 +25,9 @@ const QuestionAdminPage = () => {
   const [currentRow, setCurrentRow] = useState<API.Question>();
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
+  const [updateBankModalVisible, setUpdateBankModalVisible] =
+    useState<boolean>(false);
+
   const actionRef = useRef<ActionType>();
   /**
    * 删除节点
@@ -58,6 +62,12 @@ const QuestionAdminPage = () => {
       title: "id",
       dataIndex: "id",
       valueType: "text",
+      hideInForm: true,
+    },
+    {
+      title: "所属题库",
+      dataIndex: "questionBankId",
+      hideInTable: true,
       hideInForm: true,
     },
     {
@@ -135,7 +145,7 @@ const QuestionAdminPage = () => {
       title: "操作",
       dataIndex: "option",
       valueType: "option",
-      width: 100,
+      width: 200,
       fixed: "right",
       render: (_, record) => (
         <Space size="middle">
@@ -146,6 +156,14 @@ const QuestionAdminPage = () => {
             }}
           >
             修改
+          </Typography.Link>
+          <Typography.Link
+            onClick={() => {
+              setCurrentRow(record);
+              setUpdateBankModalVisible(true);
+            }}
+          >
+            修改所属题库
           </Typography.Link>
           <Popconfirm
             title="删除题目"
@@ -222,6 +240,16 @@ const QuestionAdminPage = () => {
           }}
           onCancel={() => {
             setUpdateModalVisible(false);
+          }}
+        />
+      )}
+      {updateBankModalVisible && (
+        <UpdateBankModal
+          visible={updateBankModalVisible}
+          questionId={currentRow?.id}
+          onCancel={() => {
+            setCurrentRow(undefined);
+            setUpdateBankModalVisible(false);
           }}
         />
       )}

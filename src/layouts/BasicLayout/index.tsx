@@ -12,7 +12,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/stores';
 import MdEditor from '@/components/MdEditor';
-import MdViewer from '@/components/MdView';
+import MdViewer from '../../components/MdViewer';
 import dynamic from 'next/dynamic';
 import getAccessibleMenu from '@/access/menuAccess';
 import { userLogoutUsingPost } from '@/api/userController';
