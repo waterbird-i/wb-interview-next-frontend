@@ -139,6 +139,7 @@ const UserAdminPage = () => {
       <ProTable<API.User>
         headerTitle={"查询表格"}
         actionRef={actionRef}
+        scroll={{ y: "90vh"}}
         toolBarRender={() => [
           <Button
             type="primary"

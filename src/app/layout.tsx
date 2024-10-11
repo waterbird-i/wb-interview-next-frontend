@@ -1,12 +1,12 @@
 "use client";
-import { AntdRegistry } from '@ant-design/nextjs-registry';
-import React, { useCallback, useEffect } from 'react';
-import BasicLayout from '@/layouts/BasicLayout';
-import { Provider, useDispatch } from 'react-redux';
-import store, { AppDispatch } from '@/stores';
-import './globals.css';
-import { getLoginUserUsingGet } from '@/api/userController';
-import { setLoginUser } from '@/stores/loginUser';
+import { Provider, useDispatch } from "react-redux";
+import { AntdRegistry } from "@ant-design/nextjs-registry";
+import React, { useCallback, useEffect } from "react";
+import BasicLayout from "@/layouts/BasicLayout";
+import store, { AppDispatch } from "@/stores";
+import "./globals.css";
+import { getLoginUserUsingGet } from "@/api/userController";
+import { setLoginUser } from "@/stores/loginUser";
 
 /**
  * 全局初始化逻辑
@@ -23,22 +23,14 @@ const InitLayout: React.FC<
    */
   const doInit = useCallback(async () => {
     const res = await getLoginUserUsingGet();
-    if (res.data) {
-      dispatch(setLoginUser(res.data as API.LoginUserVO));
-    } else {
-      // setTimeout(() => {
-      //   const testUser = {
-      //     userName: "test",
-      //     userRole: ACCESS_ENUM.ADMIN,
-      //   };
-      //   dispatch(setLoginUser(testUser));
-      // }, 3000);
+    if (res.data.data) {
+      dispatch(setLoginUser(res.data.data as API.LoginUserVO));
     }
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     doInit();
-  }, []);
+  }, [doInit]);
   return <>{children}</>;
 };
 
