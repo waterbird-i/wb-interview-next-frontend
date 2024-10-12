@@ -39,8 +39,8 @@ const UserLoginPage: React.FC = () => {
         router.replace("/");
         form.resetFields();
       }
-    } catch (e: unknown) {
-      message.error(`删除失败，${e instanceof Error ? e.message : e}`);
+    } catch (e) {
+      message.error(`登录失败，${e instanceof Error ? e.message : e}`);
     }
   };
 
