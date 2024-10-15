@@ -1,6 +1,7 @@
 import axios from "axios";
 
 // 创建 Axios 示例
+const DEV_BASE_URL = "http://localhost:8101";
 const PROD_BASE_URL = "http://123.249.81.163";
 const myAxios = axios.create({
   baseURL: PROD_BASE_URL,
