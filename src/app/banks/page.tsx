@@ -1,9 +1,9 @@
-"use server";
 import Title from "antd/es/typography/Title";
 import { listQuestionBankVoByPageUsingPost } from "@/api/questionBankController";
 import QuestionBankList from "@/components/QuestionBankList";
 import "./index.css";
-
+// 强行设置为服务端渲染（而不是静态生成）
+export const dynamic = 'force-dynamic';
 /**
  * 题库列表页面
  * @constructor

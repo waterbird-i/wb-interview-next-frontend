@@ -1,4 +1,3 @@
-"use server";
 import Title from "antd/es/typography/Title";
 import { Divider, Flex } from "antd";
 import "./index.css";
@@ -7,7 +6,8 @@ import { listQuestionBankVoByPageUsingPost } from "@/api/questionBankController"
 import { listQuestionVoByPageUsingPost } from "@/api/questionController";
 import QuestionBankList from "@/components/QuestionBankList";
 import QuestionList from "@/components/QuestionList";
-
+// 强行设置为服务端渲染（而不是静态生成）
+export const dynamic = 'force-dynamic';
 /**
  * 主页
  * @constructor
