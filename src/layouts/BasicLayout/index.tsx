@@ -1,18 +1,16 @@
 "use client";
 
 import './index.css';
-import { GithubFilled, LogoutOutlined, SearchOutlined, UserOutlined } from '@ant-design/icons';
-import { Dropdown, Input, message, theme } from 'antd';
+import { GithubFilled, LogoutOutlined, UserOutlined } from '@ant-design/icons';
+import { Dropdown, message } from 'antd';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import GlobalFooter from '@/components/GlobalFooter';
 import { menus } from '../../../config/menu';
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/stores';
-import MdEditor from '@/components/MdEditor';
-import MdViewer from '../../components/MdViewer';
 import dynamic from 'next/dynamic';
 import getAccessibleMenu from '@/access/menuAccess';
 import { userLogoutUsingPost } from '@/api/userController';
@@ -140,7 +138,6 @@ export default function BasicLayout({ children }: Props) {
         footerRender={() => {
           return <GlobalFooter />;
         }}
-        onMenuHeaderClick={(e) => console.log(e)}
         // 定义菜单
         menuDataRender={() => {
           return getAccessibleMenu(loginUser, menus);

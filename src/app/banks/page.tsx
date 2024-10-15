@@ -19,7 +19,6 @@ export default async function BanksPage() {
       sortField: "createTime",
       sortOrder: "descend",
     });
-    console.log(questionBankRes);
     questionBankList = questionBankRes.data?.data?.records ?? [];
   } catch (e) {
     console.error(`获取题库列表失败, ${e instanceof Error ? e.message : e}`);
