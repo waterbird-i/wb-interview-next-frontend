@@ -5,6 +5,9 @@ import "./index.css";
 import Link from "next/link";
 import { listQuestionBankVoByPageUsingPost } from "@/api/questionBankController";
 import { listQuestionVoByPageUsingPost } from "@/api/questionController";
+import QuestionBankList from "@/components/QuestionBankList";
+import QuestionList from "@/components/QuestionList";
+
 /**
  * 主页
  * @constructor
@@ -21,7 +24,7 @@ export default async function HomePage() {
     });
     questionBankList = questionBankRes.data?.data?.records ?? [];
   } catch (e) {
-    console.error(`删除失败，${e instanceof Error ? e.message : e}`);
+    console.error(`获取题库列表失败，${e instanceof Error ? e.message : e}`);
   }
 
   try {
@@ -32,7 +35,7 @@ export default async function HomePage() {
     });
     questionList = questionListRes.data?.data?.records ?? [];
   } catch (e) {
-    console.error(`删除失败，${e instanceof Error ? e.message : e}`);
+    console.error(`获取题目列表失败，${e instanceof Error ? e.message : e}`);
   }
   // space-between：两端对齐，项目之间的间隔都相等
   return (
@@ -41,12 +44,13 @@ export default async function HomePage() {
         <Title level={3}>最新题库</Title>
         <Link href={"/banks"}>查看更多</Link>
       </Flex>
-      <div>题库列表</div>
+      <QuestionBankList questionBankList={questionBankList} />
       <Divider />
-      <Title level={3}>最新题目</Title>
-      <div>题目列表</div>
-      {JSON.stringify(questionBankList)}
-      {JSON.stringify(questionList)}
+      <Flex justify="space-between" align="center">
+        <Title level={3}>最新题目</Title>
+        <Link href={"/questions"}>查看更多</Link>
+      </Flex>
+      <QuestionList questionList={questionList} />
     </div>
   );
 }

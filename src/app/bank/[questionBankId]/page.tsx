@@ -8,10 +8,12 @@ import Paragraph from "antd/es/typography/Paragraph";
 import "./index.css";
 
 
+
 /**
  * 题库详情页面
  * @constructor
  */
+// @ts-ignore
 const BankPage =  async ({ params }) => {
   const { questionBankId } = params;
   let bank = undefined;
