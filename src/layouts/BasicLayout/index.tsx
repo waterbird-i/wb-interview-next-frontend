@@ -1,22 +1,22 @@
 "use client";
 
-import './index.css';
-import { GithubFilled, LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { Dropdown, message } from 'antd';
-import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import GlobalFooter from '@/components/GlobalFooter';
-import { menus } from '../../../config/menu';
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '@/stores';
-import dynamic from 'next/dynamic';
-import getAccessibleMenu from '@/access/menuAccess';
-import { userLogoutUsingPost } from '@/api/userController';
-import { setLoginUser } from '@/stores/loginUser';
-import { DEFAULT_USER } from '@/constants/user';
-import SearchInput from '@/layouts/BasicLayout/components/SearchInput';
+import "./index.css";
+import { GithubFilled, LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import { Dropdown, message } from "antd";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
+import GlobalFooter from "@/components/GlobalFooter";
+import { menus } from "../../../config/menu";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/stores";
+import dynamic from "next/dynamic";
+import getAccessibleMenu from "@/access/menuAccess";
+import { userLogoutUsingPost } from "@/api/userController";
+import { setLoginUser } from "@/stores/loginUser";
+import { DEFAULT_USER } from "@/constants/user";
+import SearchInput from "@/layouts/BasicLayout/components/SearchInput";
 
 /**
  * 解决 Warning: Prop `className` did not match
@@ -34,6 +34,9 @@ const ProLayout = dynamic(
 interface Props {
   children: React.ReactNode;
 }
+
+const GITHUB_URL =
+  "https://github.com/waterbird-i/wb-interview-next-frontend/tree/master";
 
 export default function BasicLayout({ children }: Props) {
   const pathname = usePathname();
@@ -119,7 +122,7 @@ export default function BasicLayout({ children }: Props) {
             <SearchInput key="search" />,
             <a
               key="github"
-              href="https://github.com/waterbird-i"
+              href={GITHUB_URL}
               target="_blank"
             >
               <GithubFilled key="GithubFilled" />,
@@ -129,7 +132,7 @@ export default function BasicLayout({ children }: Props) {
         // 标题渲染
         headerTitleRender={(logo, title) => {
           return (
-            <a href="https://www.mianshiya.com" target="_blank">
+            <a href={GITHUB_URL} target="_blank">
               {logo}
               {title}
             </a>
